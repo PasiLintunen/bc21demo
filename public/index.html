@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet"></link>
+    <link href="css/oma.css" rel="stylesheet"></link>
+    
+    <title>My movie collections</title>
+</head>
+<body>
+    <header> 
+        <div class="container-fluid"></div>
+            <div class="searchbckimg">
+                <h1 class="display-1 text-center p-3 my-3 css-3d-text">My movie collections</h1>
+            </div>
+        </div>
+    
+        <div class="container mb-5" style="margin-top: 20px">
+            <form class="needs-validation">
+                <div class="form-group row">
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="searchterm" required="true" placeholder="Gimme movie title"/>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <button type="button" onclick="getMovies()" class="btn btn-primary">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <content>
+        <div id="app">Content</div>
+    </content>
+
+    <footer>
+        <div class="container-fluid">
+            <p class="text-muted">Author: Pasi Lintunen</p>
+        </div>
+    </footer>
+</body>
+</html>
