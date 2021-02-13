@@ -1,3 +1,11 @@
+# Misc
+*.txt
+*.jpg
+*.svg
+*.png
+*.ttf
+bootstrap.min.css
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
