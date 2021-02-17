@@ -9,31 +9,30 @@ function searchMovies() {
     $("#app").empty();
     parameter = "?title=" + st;
     $.get("http://127.0.0.1:3000/search" + parameter, function (mvdata, status) {
-        tblhead = `<table id="tbl" class="table table-hover">
-                    <thead id="tblh">
-                        <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Released</th>
-                        <th scope="col">Language</th>
-                        <th scope="col">Overview</th>
-                        </tr>
-                    </thead>
-                  <tbody>`
+        tblhead = `  <div class="row">
+                            <div class="col-sm-3"><h2>Poster</h2></div>
+                            <div class="col-sm-2"><h2>Title</h2></div>
+                            <div class="col-sm-3"><h2>Overview</h2></div>
+                            <div class="col-sm-3"><h2>Back</h2></div>
+                            <div class="col-sm-1"> </div>
+                        </div>`
         tblbody = "";   
         console.log(mvdata)
         for (var i = 0; i < mvdata.results.length; i++) {
-            tblbody = tblbody + '<tr>'
-                + '<td id="a'+i+'">' + mvdata.results[i].original_title + '</td>'
-                + '<td>' + mvdata.results[i].release_date + '</td>'
-                + '<td>' + mvdata.results[i].original_language + '</td>'
-                + '<td>' + mvdata.results[i].overview + '</td>'
-                + '<td><button type=\"button\" class=\"btn-lg btn-warning\" onclick=\"addFunction('
-                + i + ')\">Add</button></td></tr>'
+            tblbody = tblbody + '<div class="row">'
+                + '<div class="col-sm-3"><img class="img-fluid" src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2' + mvdata.results[i].poster_path + '"></img></div>'
+                + '<div class="col-sm-2" id="a'+i+'">' + mvdata.results[i].original_title + '<br><br>'
+                + 'Released: ' + mvdata.results[i].release_date + '<br><br>'
+                + 'Language: ' + mvdata.results[i].original_language + '</div>'
+                + '<div class="col-sm-3">' + mvdata.results[i].overview + '</div>'
+                + '<div class="col-sm-3"><img class="img-fluid" src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2' + mvdata.results[i].backdrop_path + '"></img></div>'
+                + '<div class="col-sm-1"><button type=\"button\" class=\"btn-lg btn-warning\" onclick=\"addFunction('
+                + i + ')\">Add</button></div></div>'
         }
          
-        tblfoot = `</tbody></table>`
+     //   tblfoot = `</tbody></table>`
                 $(document).ready(function () {
-                    $("#app").append(tblhead + tblbody + tblfoot);
+                    $("#app").append(tblhead + tblbody);
                 });
         
     });
@@ -91,14 +90,13 @@ function searchCollection() {
     var st = window.localStorage.getItem('selectedCollection');
     if (st === "" || st === null) {
         return false;
-    console.log("searchCol: null");
     }
-    console.log("searchCol: ok");
+    
     // Generates, gets collection movie datas from backend and injects HTML-table to #app in index.html
     $("#app").empty();
     parameter = "?collection=" + st;
-    $.get("http://127.0.0.1:3000/searchCollection" + parameter, function (mvdata, status) {
-        console.log(mvdata);
+    $.get("http://127.0.0.1:3000/searchCollection" + parameter, function (cmvdata, status) {
+        console.log("collec: " + cmvdata);
         tblhead = `<table id="tbl" class="table table-hover">
                     <thead id="tblh">
                         <tr>
@@ -110,17 +108,16 @@ function searchCollection() {
                     </thead>
                   <tbody>`
         tblbody = "";   
-        for (var i = 0; i < mvdata.length; i++) {
-            console.log(mvdata.length);
+        for (var i = 0; i < cmvdata.length; i++) {
             tblbody = tblbody + '<tr>'
-                + '<td id="a'+i+'">' + mvdata.Collection[1].title + '</td>'
-                + '<td>' + mvdata.results[i].release_date + '</td>'
-                + '<td>' + mvdata.results[i].original_language + '</td>'
-                + '<td>' + mvdata.results[i].overview + '</td>'
+                + '<td id="a'+i+'">' + cmvdata.collection[i].title + '</td>'
+                + '<td>' + cmvdata.collection[i].release_date + '</td>'
+                + '<td>' + cmvdata.collection[i].original_language + '</td>'
+                + '<td>' + cmvdata.collection[i].overview + '</td>'
                 + '<td><button type=\"button\" class=\"btn-lg btn-warning\" onclick=\"addFunction('
                 + i + ')\">Add</button></td></tr>'
         }
-         
+        console.log(tblbody);
         tblfoot = `</tbody></table>`
                 $(document).ready(function () {
                     $("#app").append(tblhead + tblbody + tblfoot);
