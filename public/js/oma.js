@@ -8,7 +8,7 @@ function searchMovies() {
 // Generates, gets movie datas from backend and injects HTML-table to #app in index.html
     $("#app").empty();
     parameter = "?title=" + st;
-    $.get("http://bc21demo.herokuapp.com/search" + parameter, function (mvdata, status) {
+    $.get("https://bc21demo.herokuapp.com/search" + parameter, function (mvdata, status) {
         tblhead = `  <div class="row">
                             <div class="col-sm-3"><h2>Poster</h2></div>
                             <div class="col-sm-2"><h2>Title</h2></div>
@@ -42,7 +42,7 @@ function searchMovies() {
 function addFunction(j) {
    $(document).ready(function () {
        var ftitle = $('#a' + j).text();
-       $.get("http://bc21demo.herokuapp.com/addtitle?title=" + ftitle + "&collection=" + window.localStorage.getItem('selectedCollection'),
+       $.get("https://bc21demo.herokuapp.com/addtitle?title=" + ftitle + "&collection=" + window.localStorage.getItem('selectedCollection'),
             function(data, status){
                console.log("Add title data: " + data + "\nStatus: " + status);
             });
@@ -52,7 +52,7 @@ function addFunction(j) {
 // Gets collections from backend and generates dropdown-menu items
 function getCollections() {
     localstoragetest()
-    $.get("http://bc21demo.herokuapp.com/getcollections",
+    $.get("https://bc21demo.herokuapp.com/getcollections",
             function(data, status){
                 console.log("Collection data: " + data + "\nStatus: " + status);
                 window.localStorage.setItem('collection', data);
@@ -94,7 +94,7 @@ function searchCollection() {
     // Generates, gets collection movie datas from backend and injects HTML-table to #app in index.html
     $("#app").empty();
     parameter = "?collection=" + st;
-    $.get("http://bc21demo.herokuapp.com/searchCollection" + parameter, function (cmvdata, status) {
+    $.get("https://bc21demo.herokuapp.com/searchCollection" + parameter, function (cmvdata, status) {
         console.log("collec: " + cmvdata);
         tblhead = `<table id="tbl" class="table table-hover">
                     <thead id="tblh">
