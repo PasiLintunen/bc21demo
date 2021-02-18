@@ -6,10 +6,10 @@ This web singlepager application was created to maintain multiple moviecollectio
 It is powered by
 ----------------
 
-Cloudynary (CDN)
-ElephantSQL (Postgres)
-Netlifly
-Heroku
+Cloudynary (CDN),
+ElephantSQL (Postgres),
+Netlifly,
+Heroku,
 The movie database
 
 Technologies used:
@@ -18,16 +18,16 @@ Technologies used:
 Backend
 -------
 
-Python 3
-Flask
+Python 3,
+Flask,
 SQLAlchemy
 
 Frontend
 --------
 
-HTML5
-CSS3
-Javascript
-Jquery 3
+HTML5,
+CSS3,
+Javascript,
+Jquery 3,
 Bootstrap 4
 
