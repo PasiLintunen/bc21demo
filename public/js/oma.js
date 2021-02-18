@@ -3,7 +3,7 @@ function searchMovies() {
     if (st === "" || st === null) {
         return false;
     }
-    console.log(st);
+//    console.log(st);
 
 // Generates, gets movie datas from backend and injects HTML-table to #app in index.html
     $("#app").empty();
@@ -21,7 +21,7 @@ function searchMovies() {
         for (var i = 0; i < mvdata.results.length; i++) {
             tblbody = tblbody + '<div class="row">'
                 + '<div class="col-sm-3"><img class="img-fluid" src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2' + mvdata.results[i].poster_path + '"></img></div>'
-                + '<div class="col-sm-2" id="a'+i+'">' + mvdata.results[i].original_title + '<br><br>'
+                + '<div class="col-sm-2"><div id="a'+i+'">' + mvdata.results[i].original_title + '</div><br><br>'
                 + 'Released: ' + mvdata.results[i].release_date + '<br><br>'
                 + 'Language: ' + mvdata.results[i].original_language + '</div>'
                 + '<div class="col-sm-3">' + mvdata.results[i].overview + '</div>'
@@ -42,8 +42,7 @@ function searchMovies() {
 function addFunction(j) {
    $(document).ready(function () {
        var ftitle = $('#a' + j).text();
-     //  alert(ttt);
-       $.get("http://127.0.0.1:3000/addtitle?title=" +ftitle + "&collection=" + window.localStorage.getItem('selectedCollection'),
+       $.get("http://127.0.0.1:3000/addtitle?title=" + ftitle + "&collection=" + window.localStorage.getItem('selectedCollection'),
             function(data, status){
                console.log("Add title data: " + data + "\nStatus: " + status);
             });

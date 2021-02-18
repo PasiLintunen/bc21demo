@@ -4,8 +4,8 @@ from flask_cors import CORS
 
 from sqlalchemy import text
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy import create_engine, MetaData, Table, Column
+from sqlalchemy.orm import Session, sessionmaker, Query
 from sqlalchemy import distinct, func, true
 
 import requests
@@ -24,6 +24,9 @@ THEMOVIEDB_URL = os.environ['THEMOVIEDB_URL']
 POSTREGSDB_URL = os.environ['POSTGRESDB_URL']
 CLOUDYAPISECRET = os.environ['CLOUDYAPISECRET']
 CLOUDYAPIKEY = os.environ['CLOUDYAPIKEY']
+
+cloudyimgurl = str(
+    'https://res.cloudinary.com/http-ppl-1fi/image/upload/v1612373660')
 
 # ''' Postregs db connection '''
 engine = create_engine(POSTREGSDB_URL)
@@ -45,7 +48,7 @@ Films = Base.classes.collections
 film = session.query(Films).all()
 # print("postgres: " + film[1].overview)
 
-# Movies searched by title, from themoviedb.org API
+# Movies searched by title, from themoviedb.org via API
 
 
 @ app.route('/search', methods=['GET'])
@@ -65,6 +68,17 @@ def searchCollection():
     if 'collection' in request.args:
         coll = request.args['collection'] + ""
         print("search collection: " + coll)
+
+        query = Query(Films).filter(Films.collection == coll)
+#        filmsInCollection = Films.query.filter_by(collection=coll)
+#        filmsInCollection = list(
+#            map(lambda x: x.serialize(), filmsInCollection))
+        print(*query)
+    '''        
+    qry = session.query(distinct(Films.collection))
+    print(qry)
+    result = session.execute(qry)
+
         tmpstr = ""
         stmpstr = ""
         i = 0
@@ -89,7 +103,8 @@ def searchCollection():
     stmpstr = '{"page":1,"collection":[' + stmpstr[:-1] + \
         ']}'
     print(stmpstr)
-    return (jsonify(json.loads(stmpstr)))
+    '''
+    return (jsonify(json.loads(filmsInCollection)))
 
 
 @ app.route('/addtitle/', methods=['GET'])
@@ -97,22 +112,36 @@ def addtitle():
     if 'title' in request.args:
         title = request.args['title']
         collection = request.args['collection']
-#        print("Add collection: " + collection + ' ' + title)
+        print("Add title: " + title)
 
-    dataa = jsonify(get_movie_data(title))
+    movietitle = get_movie_data(title)
+    print(movietitle)
 
-    title = dataa["results"][0]["original_title"]
-    overview = dataa["results"][0]["overview"]
-    posterpath = dataa["results"][0]["poster_path"]
-    releasedate = dataa["results"][0]["release_date"]
-    backdroppath = dataa["results"][0]["backdrop_path"]
-    language = dataa["results"][0]["original_language"]
+    title = movietitle['results'][0]['original_title']
+    overview = movietitle['results'][0]['overview']
+    posterpath = movietitle['results'][0]['poster_path']
+    releasedate = movietitle['results'][0]['release_date']
+    backdroppath = movietitle['results'][0]['backdrop_path']
+    language = movietitle['results'][0]['original_language']
 
-    print('add: ' + dataa["poster_path"][0])
+    print(posterpath)
+
     # insert to DB
-    # push images to cloud
+    ntrow = Films(collection=collection, title=title,
+                  overview=overview,
+                  releasedate=releasedate, language=language,
+                  posterurl=cloudyimgurl + posterpath,
+                  backurl=cloudyimgurl + backdroppath)
 
-    return ("success")
+    session.add(ntrow)
+    session.commit()
+
+    # push images to cloud
+    uploadtocloud(cloudyimgurl + posterpath + '.jpg')
+
+    uploadtocloud(cloudyimgurl + backdroppath + '.jpg')
+
+    return ("added to collection")
 
 
 # Get all collection-names
