@@ -45,11 +45,10 @@ session = Session()
 
 Films = Base.classes.collections
 
-
-@app.route('/search', methods=['GET'])
 '''  Movies searched by title, from themoviedb.org via API '''
 
 
+@app.route('/search', methods=['GET'])
 def search():
     if 'title' in request.args:
         title = request.args['title']
@@ -105,10 +104,10 @@ def addtitle():
     return ("added to collection")
 
 
-@app.route('/getcollections', methods=['GET'])
 ''' # Get all collection-names '''
 
 
+@app.route('/getcollections', methods=['GET'])
 def getcollections():
 
     qry = session.query(distinct(Films.collection))
