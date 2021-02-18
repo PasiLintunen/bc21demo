@@ -13,6 +13,7 @@ Heroku
 The movie database
 
 Technologies used:
+-----------------
 
 Backend
 -------
