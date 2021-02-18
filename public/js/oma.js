@@ -8,7 +8,7 @@ function searchMovies() {
 // Generates, gets movie datas from backend and injects HTML-table to #app in index.html
     $("#app").empty();
     parameter = "?title=" + st;
-    $.get("http://127.0.0.1:3000/search" + parameter, function (mvdata, status) {
+    $.get("http://bc21demo.herokuapp.com/search" + parameter, function (mvdata, status) {
         tblhead = `  <div class="row">
                             <div class="col-sm-3"><h2>Poster</h2></div>
                             <div class="col-sm-2"><h2>Title</h2></div>
