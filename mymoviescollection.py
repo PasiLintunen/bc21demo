@@ -28,12 +28,12 @@ CLOUDYAPIKEY = os.environ['CLOUDYAPIKEY']
 cloudyimgurl = str(
     'https://res.cloudinary.com/http-ppl-1fi/image/upload/v1612373660')
 
-# ''' Postregs db connection '''
+''' Postregs db connection '''
 engine = create_engine(POSTREGSDB_URL)
 
 metadata = MetaData()
 
-# Reflect db to local class
+'''# Reflect db to local class'''
 metadata.reflect(engine, schema='moviecollections')
 
 Base = automap_base(metadata=metadata)
@@ -45,13 +45,11 @@ session = Session()
 
 Films = Base.classes.collections
 
-film = session.query(Films).all()
-# print("postgres: " + film[1].overview)
 
-# Movies searched by title, from themoviedb.org via API
+@app.route('/search', methods=['GET'])
+'''  Movies searched by title, from themoviedb.org via API '''
 
 
-@ app.route('/search', methods=['GET'])
 def search():
     if 'title' in request.args:
         title = request.args['title']
@@ -70,41 +68,8 @@ def searchCollection():
         print("search collection: " + coll)
 
         query = Query(Films).filter(Films.collection == coll)
-#        filmsInCollection = Films.query.filter_by(collection=coll)
-#        filmsInCollection = list(
-#            map(lambda x: x.serialize(), filmsInCollection))
-        print(*query)
-    '''        
-    qry = session.query(distinct(Films.collection))
-    print(qry)
-    result = session.execute(qry)
 
-        tmpstr = ""
-        stmpstr = ""
-        i = 0
-        print(film[1].collection)
-        aaa = bbb = ccc = ddd = ""
-# distinct films by collection name
-        while i < len(film):
-            if film[i].collection == coll:
-                tmpstr = ""
-                aaa = str(film[i].title)
-                bbb = str(film[i].overview)
-                ccc = str(film[i].releasedate)
-                ddd = str(film[i].language)
-                tmpstr = '{"title":"' + aaa + '",' + \
-                    '"overview":"' + bbb + '",' + \
-                    '"releasedate":"' + ccc + '",' + \
-                    '"language":"' + ddd + '"}'
-#                dict(x.split('=') for x in tmpstr.split(','))
-                stmpstr = tmpstr + ',' + stmpstr
-            i = i+1
-
-    stmpstr = '{"page":1,"collection":[' + stmpstr[:-1] + \
-        ']}'
-    print(stmpstr)
-    '''
-    return (jsonify(json.loads(filmsInCollection)))
+    return (jsonify(json.loads(query)))
 
 
 @ app.route('/addtitle/', methods=['GET'])
@@ -115,7 +80,6 @@ def addtitle():
         print("Add title: " + title)
 
     movietitle = get_movie_data(title)
-    print(movietitle)
 
     title = movietitle['results'][0]['original_title']
     overview = movietitle['results'][0]['overview']
@@ -123,8 +87,6 @@ def addtitle():
     releasedate = movietitle['results'][0]['release_date']
     backdroppath = movietitle['results'][0]['backdrop_path']
     language = movietitle['results'][0]['original_language']
-
-    print(posterpath)
 
     # insert to DB
     ntrow = Films(collection=collection, title=title,
@@ -138,16 +100,15 @@ def addtitle():
 
     # push images to cloud
     uploadtocloud(cloudyimgurl + posterpath + '.jpg')
-
     uploadtocloud(cloudyimgurl + backdroppath + '.jpg')
 
     return ("added to collection")
 
 
-# Get all collection-names
+@app.route('/getcollections', methods=['GET'])
+''' # Get all collection-names '''
 
 
-@ app.route('/getcollections', methods=['GET'])
 def getcollections():
 
     qry = session.query(distinct(Films.collection))
@@ -159,7 +120,6 @@ def getcollections():
     for row in result:
         collectionList.append(row[0])
 
-#    print(collectionList)
     return (jsonify(collectionList))
 
 
