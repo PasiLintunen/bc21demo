@@ -1,33 +1,29 @@
 # bc21demo
-Code Bootcamp 2021 Demo
 
-This web singlepager application was created to maintain multiple moviecollections. 
+**Code Bootcamp 2021 Demo**
 
-It is powered by
-----------------
+This web singlepager application was created to maintain multiple moviecollections.
 
-Cloudynary (CDN),
-ElephantSQL (Postgres),
-Netlifly,
-Heroku,
-The movie database
+## It is powered by
 
-Technologies used:
------------------
+*   Cloudynary (CDN)
+*   ElephantSQL (Postgres)
+*   Netlifly
+*   Heroku
+*   The movie database
 
-Backend
--------
+## Technologies used:
 
-Python 3,
-Flask,
-SQLAlchemy
+### Backend
 
-Frontend
---------
+*   Python 3
+*   Flask
+*   SQLAlchemy
 
-HTML5,
-CSS3,
-Javascript,
-Jquery 3,
-Bootstrap 4
+### Frontend
 
+*   HTML5
+*   CSS3
+*   Javascript
+*   Jquery 3
+*   Bootstrap 4
