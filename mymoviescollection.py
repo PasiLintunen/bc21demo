@@ -60,15 +60,17 @@ def search():
 
 @ app.route('/searchCollection', methods=['GET'])
 def searchCollection():
-
+    res = ""
     coll = ""
     if 'collection' in request.args:
         coll = request.args['collection'] + ""
         print("search collection: " + coll)
-
-        query = Query(Films).filter(Films.collection == coll)
-
-    return (jsonify(json.loads(query)))
+# selects * and all columns
+# qry = session.query(distinct(Films.collection))
+        for class_instance in session.query(Films).all():
+            if class_instance.collection == coll:
+                res = res + str(vars(class_instance))
+    return (jsonify(json.dumps(res)))
 
 
 @ app.route('/addtitle/', methods=['GET'])
@@ -109,7 +111,7 @@ def addtitle():
 
 @app.route('/getcollections', methods=['GET'])
 def getcollections():
-
+    # query selects only collection column
     qry = session.query(distinct(Films.collection))
     print(qry)
     result = session.execute(qry)
