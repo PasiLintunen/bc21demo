@@ -29,3 +29,5 @@ This web singlepager application was created to maintain multiple moviecollectio
 *   Javascript
 *   Jquery 3
 *   Bootstrap 4
+
+![](https://user-images.githubusercontent.com/77331304/109011134-4430ac80-76b9-11eb-92ff-7f6c2968b3d1.png)
