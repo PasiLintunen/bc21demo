@@ -7,7 +7,7 @@ function searchMovies() {
 // Generates, gets movie datas from backend and injects Bootstrap-table to #app in index.html
     $("#app").empty();
     parameter = "?title=" + st;
-    $.get("https://bcdemo2021.herokuapp.com/search" + parameter, function (mvdata, status) {
+    $.get("https://bc21demo.herokuapp.com/search" + parameter, function (mvdata, status) {
         tblhead = `  <div class="row">
                             <div class="col-sm-3"><h2>Poster</h2></div>
                             <div class="col-sm-2"><h2>Title</h2></div>
@@ -40,7 +40,7 @@ function searchMovies() {
 function addFunction(j) {
    $(document).ready(function () {
        var ftitle = $('#a' + j).text();
-       $.get("https://bcdemo2021.herokuapp.com/addtitle?title=" + ftitle + "&collection=" + window.localStorage.getItem('selectedCollection'),
+       $.get("https://bc21demo.herokuapp.com/addtitle?title=" + ftitle + "&collection=" + window.localStorage.getItem('selectedCollection'),
             function(data, status){
                console.log("Add title data: " + data + "\nStatus: " + status);
             });
@@ -55,7 +55,8 @@ function removeFunction(j) {
 // Gets collections from backend and generates dropdown-menu items
 function getCollections() {
     localstoragetest()
-    $.get("https://bcdemo2021.herokuapp.com/getcollections",
+    setAjaxCORS ()
+    $.get("https://bc21demo.herokuapp.com/getcollections",
             function(data, status){
                 console.log("Collection data: " + data + "\nStatus: " + status);
                 window.localStorage.setItem('collection', data);
@@ -69,6 +70,27 @@ function getCollections() {
                               
             });
 }
+
+function setAjaxCORS (){
+    var settings = {
+          'cache': false,
+//          'dataType': "jsonp",
+          "async": true,
+          "crossDomain": true,
+          "url": "https://bc21demo.herokuapp.com/",
+          "method": "GET",
+          "headers": {
+              "accept": "application/json",
+              "Access-Control-Allow-Origin":"*"
+          }
+      }
+
+      $.ajax(settings).done(function (response) {
+          console.log(response);
+
+      });
+}
+
 // Tests is localstorage supported by the browser
 function localstoragetest() {
     if (typeof (Storage) !== "undefined") {
@@ -98,7 +120,7 @@ function searchCollection() {
     // Generates, gets collection movie datas from backend and injects HTML-table to #app in index.html
     $("#app").empty();
     parameter = "?collection=" + st;
-    $.get("https://bcdemo2021.herokuapp.com/searchCollection" + parameter, function (cmvdata, status) {
+    $.get("https://bc21demo.herokuapp.com/searchCollection" + parameter, function (cmvdata, status) {
 //        console.log("collection data: " + cmvdata);
         cmvdata = sqlalchemyJSONtoJSON(cmvdata);
 
