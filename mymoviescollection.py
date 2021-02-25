@@ -58,19 +58,25 @@ def search():
     return (jsonify(dataa))
 
 
+'''  Movies searched from selected collection'''
+
+
 @ app.route('/searchCollection', methods=['GET'])
 def searchCollection():
     res = ""
     coll = ""
     if 'collection' in request.args:
         coll = request.args['collection'] + ""
-        print("search collection: " + coll)
+
 # selects * and all columns
-# qry = session.query(distinct(Films.collection))
         for class_instance in session.query(Films).all():
             if class_instance.collection == coll:
                 res = res + str(vars(class_instance))
+
     return (jsonify(json.dumps(res)))
+
+
+''' Adds title to selected collection'''
 
 
 @ app.route('/addtitle/', methods=['GET'])
@@ -78,7 +84,6 @@ def addtitle():
     if 'title' in request.args:
         title = request.args['title']
         collection = request.args['collection']
-        print("Add title: " + title)
 
     movietitle = get_movie_data(title)
 
@@ -100,8 +105,8 @@ def addtitle():
     session.commit()
 
     # push images to cloud
-    uploadtocloud(cloudyimgurl + posterpath + '.jpg')
-    uploadtocloud(cloudyimgurl + backdroppath + '.jpg')
+    uploadtocloud(posterpath)
+    uploadtocloud(backdroppath)
 
     return ("added to collection")
 
@@ -113,7 +118,7 @@ def addtitle():
 def getcollections():
     # query selects only collection column
     qry = session.query(distinct(Films.collection))
-    print(qry)
+
     result = session.execute(qry)
 
     collectionList = []
@@ -122,6 +127,9 @@ def getcollections():
         collectionList.append(row[0])
 
     return (jsonify(collectionList))
+
+
+'''  Queries movie database API '''
 
 
 def get_movie_data(value):

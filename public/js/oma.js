@@ -3,12 +3,11 @@ function searchMovies() {
     if (st === "" || st === null) {
         return false;
     }
-//    console.log(st);
 
-// Generates, gets movie datas from backend and injects HTML-table to #app in index.html
+// Generates, gets movie datas from backend and injects Bootstrap-table to #app in index.html
     $("#app").empty();
     parameter = "?title=" + st;
-    $.get("http://127.0.0.1:3000/search" + parameter, function (mvdata, status) {
+    $.get("https://bcdemo2021.herokuapp.com/search" + parameter, function (mvdata, status) {
         tblhead = `  <div class="row">
                             <div class="col-sm-3"><h2>Poster</h2></div>
                             <div class="col-sm-2"><h2>Title</h2></div>
@@ -30,7 +29,6 @@ function searchMovies() {
                 + i + ')\">Add</button></div></div>'
         }
          
-     //   tblfoot = `</tbody></table>`
                 $(document).ready(function () {
                     $("#app").append(tblhead + tblbody);
                 });
@@ -42,17 +40,22 @@ function searchMovies() {
 function addFunction(j) {
    $(document).ready(function () {
        var ftitle = $('#a' + j).text();
-       $.get("http://127.0.0.1:3000/addtitle?title=" + ftitle + "&collection=" + window.localStorage.getItem('selectedCollection'),
+       $.get("https://bcdemo2021.herokuapp.com/addtitle?title=" + ftitle + "&collection=" + window.localStorage.getItem('selectedCollection'),
             function(data, status){
                console.log("Add title data: " + data + "\nStatus: " + status);
             });
     });
 };
 
+// Remove movie from collection
+function removeFunction(j) { 
+    //Code here
+};
+
 // Gets collections from backend and generates dropdown-menu items
 function getCollections() {
     localstoragetest()
-    $.get("http://127.0.0.1:3000/getcollections",
+    $.get("https://bcdemo2021.herokuapp.com/getcollections",
             function(data, status){
                 console.log("Collection data: " + data + "\nStatus: " + status);
                 window.localStorage.setItem('collection', data);
@@ -95,34 +98,32 @@ function searchCollection() {
     // Generates, gets collection movie datas from backend and injects HTML-table to #app in index.html
     $("#app").empty();
     parameter = "?collection=" + st;
-    $.get("http://127.0.0.1:3000/searchCollection" + parameter, function (cmvdata, status) {
+    $.get("https://bcdemo2021.herokuapp.com/searchCollection" + parameter, function (cmvdata, status) {
 //        console.log("collection data: " + cmvdata);
         cmvdata = sqlalchemyJSONtoJSON(cmvdata);
 
-        tblhead = `<table id="tbl" class="table table-hover">
-                    <thead id="tblh">
-                        <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Released</th>
-                        <th scope="col">Language</th>
-                        <th scope="col">Overview</th>
-                        </tr>
-                    </thead>
-                  <tbody>`
+        tblhead = `<div class="row">
+                            <div class="col-sm-3"><h2>Poster</h2></div>
+                            <div class="col-sm-2"><h2>Title</h2></div>
+                            <div class="col-sm-3"><h2>Overview</h2></div>
+                            <div class="col-sm-3"><h2>Back</h2></div>
+                            <div class="col-sm-1"> </div>
+                        </div>`
         tblbody = "";
        for (i = 0; i < cmvdata.movies.length; i++) {
-            tblbody = tblbody + '<tr>'
-                + '<td id="a'+i+'">' + cmvdata.movies[i].title + '</td>'
-                + '<td>' + cmvdata.movies[i].releasedate + '</td>'
-                + '<td>' + cmvdata.movies[i].language + '</td>'
-                + '<td>' + cmvdata.movies[i].overview + '</td>'
-                + '<td><button type=\"button\" class=\"btn-lg btn-warning\" onclick=\"addFunction('
-                + i + ')\">Add</button></td></tr>'
+           tblbody = tblbody + '<div class="row">'
+                + '<div class="col-sm-3"><img class="img-fluid" src=' +'\"' + cmvdata.movies[i].posterurl +'.jpg' + '"></img></div>'
+                + '<div class="col-sm-2"><div id="a'+i+'">' + cmvdata.movies[i].title + '</div><br><br>'
+                + 'Released: ' + cmvdata.movies[i].releasedate + '<br><br>'
+                + 'Language: ' + cmvdata.movies[i].language + '</div>'
+                + '<div class="col-sm-3">' + cmvdata.movies[i].overview + '</div>'
+                + '<div class="col-sm-3"><img class="img-fluid" src=' +'\"' + cmvdata.movies[i].backurl +'.jpg' + '"></img></div>'
+                + '<div class="col-sm-1"><button type=\"button\" class=\"btn-lg btn-warning\" onclick=\"removeFunction('
+                + i + ')\">Remove</button></div></div>'
         }
         console.log(tblbody);
-        tblfoot = `</tbody></table>`
                 $(document).ready(function () {
-                    $("#app").append(tblhead + tblbody + tblfoot);
+                    $("#app").append(tblhead + tblbody);
                 });
         
     });
@@ -175,7 +176,7 @@ function sqlalchemyJSONtoJSON(text) {
     text = text.replaceAll("\"]", "]");
 
     obj = JSON.parse(text);
-    console.log(text);
+
     return obj;
 };
     
